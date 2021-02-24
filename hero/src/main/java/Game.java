@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 
 import static com.googlecode.lanterna.input.KeyType.*;
-import static java.lang.System.*;
 
 public class Game {
     private Screen screen;
@@ -30,8 +29,8 @@ public class Game {
 
         // Load Font
         File fontFile = new File("src/main/resources/square.ttf");
-        if (fontFile.canRead())
-            System.out.println("can read!");
+        if (!fontFile.canRead())
+            System.out.println("File doesn't exist");
 
         Font font =  Font.createFont(Font.TRUETYPE_FONT, fontFile);
 
@@ -71,15 +70,12 @@ public class Game {
         draw();
         KeyStroke key = screen.readInput();
         while (key.getKeyType() != EOF) {
-            if (key.getKeyType() == Character && key.getCharacter() == 'q')
+            if ((key.getKeyType() == Character && key.getCharacter() == 'q') || arena.isGameover()) {
                 screen.close();
+            }
             arena.processKey(key);
             draw();
             key = screen.readInput();
         }
-    }
-
-    private void processKey(KeyStroke key) {
-        arena.processKey(key);
     }
 }

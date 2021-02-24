@@ -15,6 +15,8 @@ public class Arena {
     private Hero hero;
     private List<Wall> walls;
     private List<Coin> coins;
+    private List<Monster> monsters;
+    private boolean gameover;
 
     Arena(int width, int height) {
         this.width = width;
@@ -22,6 +24,8 @@ public class Arena {
         hero = new Hero(10,10);
         walls = createWalls();
         coins = createCoins();
+        monsters = createMonsters();
+        this.gameover = false;
     }
 
     public void draw(TextGraphics graphics) {
@@ -32,6 +36,8 @@ public class Arena {
             wall.draw(graphics);
         for (Coin coin: coins)
             coin.draw(graphics);
+        for (Monster monster: monsters)
+            monster.draw(graphics);
     }
 
     private boolean canHeroMove(Position position) {
@@ -52,10 +58,13 @@ public class Arena {
     }
 
     private void moveHero(Position position) {
+        moveMonsters();
         if (canHeroMove(position)) {
             retrieveCoins(position);
             hero.setPosition(position);
+            verifyWin();
         }
+        verifyMonsterCollisions();
     }
 
     public void processKey(KeyStroke key) {
@@ -92,10 +101,75 @@ public class Arena {
     }
 
     private List<Coin> createCoins() {
+        Coin coin;
         Random random = new Random();
         List<Coin> coins = new ArrayList<>();
-        for (int i = 0; i < 5; i++)
-            coins.add(new Coin(random.nextInt(width-2) + 1, random.nextInt(height-2)+1));
+        for (int i = 0; i < 5; i++) {
+            do {
+                coin = new Coin(random.nextInt(width-2) + 1, random.nextInt(height-2)+1);
+            } while(coin.getPosition().equals(hero.getPosition()));
+            coins.add(coin);
+        }
         return coins;
+    }
+
+    private List<Monster> createMonsters() {
+        Monster monster;
+        boolean check;
+        Random random = new Random();
+        List<Monster> monsters = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            do {
+                check = true;
+                monster = new Monster(random.nextInt(width-2) + 1,random.nextInt(height -2) + 1);
+                for (Coin coin: coins) {
+                    if (monster.getPosition().equals(coin.getPosition())) {
+                        check = false;
+                        break;
+                    }
+                }
+
+            } while (monster.getPosition().equals(hero.getPosition()) && check);
+            monsters.add(monster);
+        }
+        return monsters;
+    }
+
+    private boolean canMonsterMove(Position position) {
+        for (Coin coin: coins)
+            if (coin.getPosition().equals(position))
+                return false;
+        for (Wall wall: walls)
+            if (wall.getPosition().equals(position))
+                return false;
+        return true;
+    }
+
+    private void moveMonsters() {
+        for (Monster monster: monsters) {
+            Position position = monster.moveRandom();
+            if (canMonsterMove(position))
+                monster.setPosition(position);
+        }
+    }
+
+    private void verifyMonsterCollisions() {
+        for (Monster monster: monsters)
+            if (monster.getPosition().equals(hero.getPosition())) {
+                System.out.println("GAME OVER!");
+                gameover = true;
+            }
+    }
+
+    private void verifyWin() {
+        if (coins.isEmpty()) {
+            System.out.println("YOU BEAT THE GAME");
+            gameover = true;
+            coins.add(new Coin(-1,-1));
+        }
+    }
+
+    public boolean isGameover() {
+        return gameover;
     }
 }
