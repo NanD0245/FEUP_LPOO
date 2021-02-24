@@ -56,7 +56,7 @@ public class Game {
         screen.doResizeIfNecessary();     // resize screen if necessary
 
         graphics = screen.newTextGraphics();
-        
+
 
         arena = new Arena(20,20);
     }
