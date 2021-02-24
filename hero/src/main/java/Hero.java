@@ -4,12 +4,9 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
 
-public class Hero {
-    private Position position;
+public class Hero extends Element{
 
-    Hero(int x, int y) {
-        position = new Position(x,y);
-    }
+    Hero(int x, int y) {super(x,y); }
 
     public void draw(TextGraphics graphics) {
         //graphics.setBackgroundColor(TextColor.Factory.fromString("#FFFF33"));
