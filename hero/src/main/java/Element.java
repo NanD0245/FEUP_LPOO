@@ -8,4 +8,5 @@ public abstract class Element {
     }
 
     public abstract void draw(TextGraphics graphics);
+    public abstract Position getPosition();
 }

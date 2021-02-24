@@ -8,38 +8,54 @@ import com.googlecode.lanterna.screen.Screen;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Arena {
     private int width, height;
     private Hero hero;
     private List<Wall> walls;
+    private List<Coin> coins;
 
     Arena(int width, int height) {
         this.width = width;
         this.height = height;
         hero = new Hero(10,10);
         walls = createWalls();
+        coins = createCoins();
     }
 
     public void draw(TextGraphics graphics) {
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#bfbfbf"));
         graphics.fillRectangle(new TerminalPosition(0,0), new TerminalSize(width,height),' ');
         hero.draw(graphics);
         for (Wall wall : walls)
             wall.draw(graphics);
+        for (Coin coin: coins)
+            coin.draw(graphics);
     }
 
     private boolean canHeroMove(Position position) {
-            for (Wall wall : walls) {
-                if (wall.getPosition().equals(position))
-                    return false;
-            }
+        for (Wall wall : walls) {
+            if (wall.getPosition().equals(position))
+                return false;
+        }
         return true;
     }
 
+    private void retrieveCoins(Position position) {
+        for (Coin coin: coins) {
+            if (coin.getPosition().equals(position)) {
+                coins.remove(coin);
+                break;
+            }
+        }
+    }
+
     private void moveHero(Position position) {
-        if (canHeroMove(position))
+        if (canHeroMove(position)) {
+            retrieveCoins(position);
             hero.setPosition(position);
+        }
     }
 
     public void processKey(KeyStroke key) {
@@ -73,5 +89,13 @@ public class Arena {
         }
 
         return walls;
+    }
+
+    private List<Coin> createCoins() {
+        Random random = new Random();
+        List<Coin> coins = new ArrayList<>();
+        for (int i = 0; i < 5; i++)
+            coins.add(new Coin(random.nextInt(width-2) + 1, random.nextInt(height-2)+1));
+        return coins;
     }
 }
