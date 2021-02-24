@@ -1,6 +1,5 @@
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextCharacter;
-import com.googlecode.lanterna.gui2.TextBox;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
@@ -38,6 +37,10 @@ public class Game {
         screen.refresh();
     }
 
+    private void moveHero(Position position) {
+        hero.setPosition(position);
+    }
+
     public void run() throws IOException{
         draw();
         KeyStroke key = screen.readInput();
@@ -45,28 +48,26 @@ public class Game {
         while (check) {
             switch (key.getKeyType()) {
                 case ArrowUp:
-                    if (hero.getY() > 0) {
-                        screen.clear();
-                        hero.moveUp();
-                        hero.draw(screen);
-                        screen.refresh();
-                    }
+                    screen.clear();
+                    moveHero(hero.moveUp());
+                    hero.draw(screen);
+                    screen.refresh();
                     break;
                 case ArrowDown:
                     screen.clear();
-                    hero.moveDown();
+                    moveHero(hero.moveDown());
                     hero.draw(screen);
                     screen.refresh();
                     break;
                 case ArrowLeft:
                     screen.clear();
-                    hero.moveLeft();
+                    moveHero(hero.moveLeft());
                     hero.draw(screen);
                     screen.refresh();
                     break;
                 case ArrowRight:
                     screen.clear();
-                    hero.moveRight();
+                    moveHero(hero.moveRight());
                     hero.draw(screen);
                     screen.refresh();
                     break;
