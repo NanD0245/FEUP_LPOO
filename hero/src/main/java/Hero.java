@@ -15,6 +15,8 @@ public class Hero {
         //graphics.setBackgroundColor(TextColor.Factory.fromString("#FFFF33"));
         graphics.setForegroundColor(TextColor.Factory.fromString("#FFFF33"));
         graphics.enableModifiers(SGR.BOLD);
+        //graphics.putString(position.getX()*2, position.getY()*2+1, "\\/");
+        //graphics.putString(position.getX()*2, position.getY()*2+1, "/\\");
         graphics.putString(position.getX(), position.getY(), "X");
     }
 

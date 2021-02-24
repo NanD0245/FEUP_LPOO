@@ -19,7 +19,7 @@ public class Arena {
 
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
-        graphics.fillRectangle(new TerminalPosition(0,0), new TerminalSize(heigh,width),' ');
+        graphics.fillRectangle(new TerminalPosition(0,0), new TerminalSize(width,heigh),' ');
         hero.draw(graphics);
     }
 

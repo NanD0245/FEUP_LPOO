@@ -10,7 +10,12 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.swing.AWTTerminal;
+import com.googlecode.lanterna.terminal.swing.AWTTerminalFontConfiguration;
+import com.googlecode.lanterna.terminal.swing.AWTTerminalFrame;
 
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 
 import static com.googlecode.lanterna.input.KeyType.*;
@@ -21,10 +26,28 @@ public class Game {
     private Arena arena;
     private TextGraphics graphics;
 
-    Game() throws IOException {
+    Game() throws IOException, FontFormatException {
+
+        // Load Font
+        File fontFile = new File("src/main/resources/square.ttf");
+        if (fontFile.canRead())
+            System.out.println("can read!");
+
+        Font font =  Font.createFont(Font.TRUETYPE_FONT, fontFile);
+
+        // Register Font
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge.registerFont(font);
+        //Configure Default Terminal Factory
+        Font loadedFont = font.deriveFont(Font.PLAIN, 25);
+        AWTTerminalFontConfiguration fontConfig = AWTTerminalFontConfiguration.newInstance(loadedFont);
+
         TerminalSize terminalSize = new TerminalSize(125, 40);
+
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory()
                 .setInitialTerminalSize(terminalSize);
+        terminalFactory.setTerminalEmulatorFontConfiguration(fontConfig);
+        terminalFactory.setForceAWTOverSwing(true);
         Terminal terminal = terminalFactory.createTerminal();
 
         screen = new TerminalScreen(terminal);
@@ -33,10 +56,7 @@ public class Game {
         screen.doResizeIfNecessary();     // resize screen if necessary
 
         graphics = screen.newTextGraphics();
-
-
-        screen.refresh();
-        //graphics.fill('a');
+        
 
         arena = new Arena(20,20);
     }

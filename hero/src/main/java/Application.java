@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.IOException;
 
 public class Application {
@@ -5,7 +6,7 @@ public class Application {
         try {
             Game game = new Game();
             game.run();
-        } catch (IOException e) {
+        } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
     }
