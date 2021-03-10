@@ -41,7 +41,7 @@ public class Game {
         Font loadedFont = font.deriveFont(Font.PLAIN, 25);
         AWTTerminalFontConfiguration fontConfig = AWTTerminalFontConfiguration.newInstance(loadedFont);
 
-        TerminalSize terminalSize = new TerminalSize(125, 40);
+        TerminalSize terminalSize = new TerminalSize(40, 40);
 
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory()
                 .setInitialTerminalSize(terminalSize);
