@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ListAggregatorTest {
@@ -33,6 +34,28 @@ public class ListAggregatorTest {
         int max = aggregator.max();
 
         Assertions.assertEquals(5, max);
+    }
+
+    @Test
+    public void max_bug_7263() {
+        list = Arrays.asList(-1,-6,-5);
+
+        ListAggregator aggregator = new ListAggregator(list);
+
+        int max = aggregator.max();
+
+        Assertions.assertEquals(-1,max);
+    }
+
+    @Test
+    public void max_empty() {
+        list = Collections.emptyList();
+
+        ListAggregator aggregator = new ListAggregator(list);
+
+        Integer max = aggregator.max();
+
+        Assertions.assertNull(max);
     }
 
     @Test
@@ -72,16 +95,7 @@ public class ListAggregatorTest {
         Assertions.assertEquals(4, distinct);
     }
 
-    @Test
-    public void max_bug_7263() {
-        list = Arrays.asList(-1,-6,-5);
 
-        ListAggregator aggregator = new ListAggregator(list);
-
-        int max = aggregator.max();
-
-        Assertions.assertEquals(-1,max);
-    }
 
     @Test
     public void max_bug_8726() {
