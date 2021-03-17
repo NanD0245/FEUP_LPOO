@@ -1,4 +1,6 @@
-public class Triangle implements Shape {
+import java.awt.geom.Area;
+
+public class Triangle implements AreaShape {
     private double base;
     private double height;
 
@@ -18,5 +20,10 @@ public class Triangle implements Shape {
     @Override
     public double getArea() {
         return (base * height) / 2;
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("Triangle");
     }
 }

@@ -1,3 +1,2 @@
-public interface Shape {
-    double getArea();
+public interface Shape extends Drawable {
 }
